@@ -1,0 +1,27 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import RecentPublications from "../components/RecentPublications.astro";
+import PortfolioLayout from "../components/PortfolioLayout";
+import Mainheader from "../components/Mainheader.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="w-full max-w-screen mx-auto dark:bg-neutral-800 dark:text-neutral-300 transition-colors duration-300" >
+    <div class="max-w-screen-md mx-auto">
+      <Mainheader />
+    </div>
+    
+    <main class="flex flex-col justify-center">
+     <PortfolioLayout client:load />
+	    <!-- <RecentPublications /> -->
+	  </main>
+  </body>
+</html>
+

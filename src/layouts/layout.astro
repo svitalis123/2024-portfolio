@@ -1,0 +1,51 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+import "../styles/globals.css";
+import '@fontsource-variable/raleway';
+import '@fontsource-variable/work-sans';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Primary Meta Tags -->
+    <meta property="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Roots Africa" />
+
+    <meta name="msapplication-TileImage" content="/favicon.ico" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://rootsafrica.co" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <!-- <meta property="og:image" content="https://d1xwgzzhnwofct.cloudfront.net/images/meta-tag.png" /> -->
+    <meta
+      property="og:image"
+      content="https://rootsafrica.co/images/logo.jpg"
+    />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="canonical" href="https://rootsafrica.co" />
+    <!-- image link, make sure it's jpg -->
+    <meta property="og:url" content="https://rootsafrica.co" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://rootsafrica.co" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <!-- <meta property="twitter:image" content="https://d1xwgzzhnwofct.cloudfront.net/images/meta-tag.png" /> -->
+  </head>
+  <body id="boddi">
+    <slot />
+  </body>
+</html>

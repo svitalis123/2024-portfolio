@@ -1,0 +1,187 @@
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Terminal, Book, ChevronDown, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
+
+// Assume we have these components defined elsewhere
+import TerminalPortfolio from './TerminalPortfolio';
+import RecentPublications from './RecentPublications.astro';
+import Meteor from './shared/Meteor';
+import Spotlight from './shared/Spotlight';
+
+const PortfolioLayout = () => {
+  const [activeSection, setActiveSection] = useState('hero');
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const projectsPerPage = 6;
+
+  const projects = {
+    websites: [
+      { id: 1, title: 'E-commerce Website', image: '/api/placeholder/300/169' },
+      { id: 2, title: 'Portfolio Site', image: '/api/placeholder/300/169' },
+      { id: 3, title: 'Blog Platform', image: '/api/placeholder/300/169' },
+      { id: 4, title: 'Corporate Website', image: '/api/placeholder/300/169' },
+      { id: 5, title: 'Restaurant Booking Site', image: '/api/placeholder/300/169' },
+      { id: 6, title: 'Photography Portfolio', image: '/api/placeholder/300/169' },
+      { id: 7, title: 'Real Estate Listings', image: '/api/placeholder/300/169' },
+      { id: 8, title: 'Online Magazine', image: '/api/placeholder/300/169' },
+      { id: 9, title: 'Travel Blog', image: '/api/placeholder/300/169' },
+      { id: 10, title: 'Fitness Trainer Website', image: '/api/placeholder/300/169' },
+    ],
+    webapps: [
+      { id: 11, title: 'Weather App', image: '/api/placeholder/300/169' },
+      { id: 12, title: 'Task Manager', image: '/api/placeholder/300/169' },
+      { id: 13, title: 'Social Media Dashboard', image: '/api/placeholder/300/169' },
+      { id: 14, title: 'Budget Tracker', image: '/api/placeholder/300/169' },
+      { id: 15, title: 'Recipe Finder', image: '/api/placeholder/300/169' },
+      { id: 16, title: 'Workout Planner', image: '/api/placeholder/300/169' },
+      { id: 17, title: 'Language Learning Tool', image: '/api/placeholder/300/169' },
+      { id: 18, title: 'Job Application Tracker', image: '/api/placeholder/300/169' },
+      { id: 19, title: 'Habit Tracker', image: '/api/placeholder/300/169' },
+      { id: 20, title: 'Meditation Timer', image: '/api/placeholder/300/169' },
+    ],
+  };
+
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    exit: { opacity: 0, y: -50, transition: { duration: 0.5 } },
+  };
+
+  const ProjectCategory = ({ title, projects }) => {
+    const totalPages = Math.ceil(projects.length / projectsPerPage);
+    const startIndex = (currentPage - 1) * projectsPerPage;
+    const endIndex = startIndex + projectsPerPage;
+    const currentProjects = projects.slice(startIndex, endIndex);
+
+    return (
+      <div className="mb-12">
+        <h3 className="text-2xl font-bold mb-4 dark:text-neutral-200">{title}</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {currentProjects.map((project) => (
+            <motion.div
+              key={project.id}
+              className="relative rounded-lg overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105"
+              whileHover={{ y: -5 }}
+              onClick={() => setSelectedProject(project)}
+            >
+              <img src={project.image} alt={project.title} className="w-full h-auto object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                <h4 className="text-white text-lg font-semibold">{project.title}</h4>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        <div className="flex justify-center items-center mt-8">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="p-2 rounded-full hover:bg-gray-200 transition duration-300 disabled:opacity-50"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <span className="mx-4 dark:text-neutral-300">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="p-2 rounded-full hover:bg-gray-200 transition duration-300 disabled:opacity-50"
+          >
+            <ChevronRight size={24} />
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="dark:bg-neutral-900 dark:text-neutral-300 min-h-screen">
+      <Spotlight />
+      <Meteor />
+      <AnimatePresence mode="wait">
+        {activeSection === 'hero' && (
+          <motion.section
+            key="hero"
+            className="h-screen flex items-center justify-center"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={sectionVariants}
+          >
+            {/* Hero content (same as before) */}
+          </motion.section>
+        )}
+
+        {activeSection === 'terminal' && (
+          <motion.section
+            key="terminal"
+            className="py-16 min-h-screen"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={sectionVariants}
+          >
+            {/* Terminal content (same as before) */}
+          </motion.section>
+        )}
+
+        {activeSection === 'projects' && (
+          <motion.section
+            key="projects"
+            className="py-16 min-h-screen"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={sectionVariants}
+          >
+            <div className="container mx-auto px-4" id='projects'>
+              <h2 className="text-4xl font-bold text-center mb-12 dark:text-neutral-100">My Projects</h2>
+              <ProjectCategory title="Websites" projects={projects.websites} />
+              <ProjectCategory title="Web Applications" projects={projects.webapps} />
+              <div className="text-center mt-8">
+                <button
+                  onClick={() => setActiveSection('hero')}
+                  className="dark:bg-neutral-700 hover:dark:bg-neutral-600 dark:text-neutral-100 text-white px-6 py-2 rounded-full font-semibold bg-neutral-700 hover:bg-neutral-600 transition duration-300"
+                >
+                  Back to Home
+                </button>
+              </div>
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50"
+          >
+            <motion.div
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              className="bg-white dark:bg-neutral-800 rounded-lg p-8 max-w-2xl w-full"
+            >
+              <h3 className="text-2xl font-bold mb-4 dark:text-neutral-100">{selectedProject.title}</h3>
+              <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-auto object-cover rounded-lg mb-4" />
+              <p className="dark:text-neutral-300">Project details go here...</p>
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="mt-4 bg-neutral-700 hover:bg-neutral-600 text-white px-4 py-2 rounded-full transition duration-300"
+              >
+                Close
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Navigation (same as before) */}
+    </div>
+  );
+};
+
+export default PortfolioLayout;
